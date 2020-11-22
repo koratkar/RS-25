@@ -33,12 +33,14 @@ function addme() {
     let k = getpics()
     for (i = 0; i<k.length; i++) {
         let image = k[i]
-        client.query(`INSERT INTO catballot (img, score) VALUES (${image}, 1)`, (err, response) => {
+        let text = 'INSERT INTO catballot(img, score) VALUES ($1, $2) RETURNING *'
+        let values = [image, 1]
+        client.query(text, values, (err, response) => {
             if (err) {
                 console.log(err)
                 return
             } 
-            console.log('succes: ' + image)
+            console.log('insert succesful')
         })
     }
 }
@@ -50,7 +52,7 @@ function update(pic) {
         if (err) {
             console.log(err)
         } else {
-            console.log(res.rows)
+            console.log('update succesful')
         }
     })
 }
