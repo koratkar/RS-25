@@ -9,11 +9,13 @@ let { Client } = require('pg')
 let fs = require('fs')
 const { checkServerIdentity } = require('tls')
 const { response } = require('express')
+let pass = require(__dirname + '/pass.js')
 
 let client = new Client({
     user: 'postgres',
     hostname: 'localhost',
     database: 'kittyvote',
+    password: pass.pass(),
     port: 5432,
 })
 
@@ -35,7 +37,7 @@ function addme() {
         let image = k[i]
         let text = 'INSERT INTO catballot(img, score) VALUES ($1, $2) RETURNING *'
         let values = [image, 1]
-        client.query(text, values, (err, response) => {
+        client.query(text, values, (err) => {
             if (err) {
                 console.log(err)
                 return
